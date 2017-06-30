@@ -1,71 +1,52 @@
 <template>
-  <div class="todo-container">
-    <div class="todo-wrap">
-      <demo-header :add="add"></demo-header>
-      <list :todos="todos" :remove="remove"></list>
-      <demo-footer :todos="todos" :remove-selected="removeSelected":select-all-todos="selectAllTodos"></demo-footer>
-   </div>
+  <div class="container">
+    <section class="jumbotron">
+      <h3 class="jumbotron-heading">Search Github Users</h3>
+        <search :set-search-name="setSearchName"></search>
+    </section>
+      <test-main :search-name="searchName"></test-main>
   </div>
 </template>
 
 <script>
-import header from './header.vue'
-import list from './list.vue'
-import footer from './footer.vue'
-import localStorageUtil from '../util/localStorageUtil.js'
+  import search from './search.vue'
+  import main from './main.vue'
 export default {
-    data(){
-        return{
-          todos:[]
-        }
-    },
-    created () {
-      setTimeout(()=>{
-        this.todos = localStorageUtil.readTodos()
-      },1000)
-    },
-    methods:{
-      add(todo){
-          this.todos.unshift(todo)
-      },
-      remove(index){
-       this.todos.splice(index, 1)
-      },
-      removeSelected(){
-        this.todos =  this.todos.filter(todo => !todo.complete)
-      },
-      selectAllTodos(isCheck){
-         this.todos.forEach(todo =>{
-             todo.complete = isCheck
-         })
+   data(){
+      return{
+        searchName:''
       }
-    },
-    watch:{
-      todos:{
-          deep: true,
-          /*handler(newTodos){
-          localStorageUtil.saveTodos(newTodos)
-          }*/
-          handler:localStorageUtil.saveTodos
-      }
-    },
-    components:{
-        'demo-header': header,
-          list,
-        'demo-footer': footer
+   },
+   methods:{
+    setSearchName(searchName){
+        this.searchName = searchName
     }
+   },
+   components:{
+      search,
+      'test-main' : main
+   }
 }
 
 </script>
 
 <style>
-  .todo-container {
-    width: 600px;
-    margin: 0 auto;
+  .card {
+    float: left;
+    width: 33.333%;
+    padding: .75rem;
+    margin-bottom: 2rem;
+    border: 1px solid #efefef;
+    text-align: center;
   }
-  .todo-container .todo-wrap {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+
+  .card > img {
+    margin-bottom: .75rem;
+    border-radius: 100px;
   }
+
+  .card-text {
+    font-size: 85%;
+  }
+
 </style>
