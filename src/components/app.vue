@@ -12,16 +12,17 @@
 import header from './header.vue'
 import list from './list.vue'
 import footer from './footer.vue'
+import localStorageUtil from '../util/localStorageUtil.js'
 export default {
     data(){
         return{
-          todos:[
-            {name:'curry',complete:false},
-            {name:'durant',complete:true},
-            {name:'thompson',complete:false},
-            {name:'green',complete:false},
-          ]
+          todos:[]
         }
+    },
+    created () {
+      setTimeout(()=>{
+        this.todos = localStorageUtil.readTodos()
+      },1000)
     },
     methods:{
       add(todo){
@@ -37,6 +38,15 @@ export default {
          this.todos.forEach(todo =>{
              todo.complete = isCheck
          })
+      }
+    },
+    watch:{
+      todos:{
+          deep: true,
+          /*handler(newTodos){
+          localStorageUtil.saveTodos(newTodos)
+          }*/
+          handler:localStorageUtil.saveTodos
       }
     },
     components:{
